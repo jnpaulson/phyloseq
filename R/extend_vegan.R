@@ -206,7 +206,9 @@ estimate_richness <- function(physeq, split=TRUE, measures=NULL){
 	if( "Fisher" %in% measures ){
     fisher = tryCatch(fisher.alpha(OTU, se=TRUE), 
       warning=function(w){
-        warning("phyloseq::estimate_richness: Warning in fisher.alpha(). See `?fisher.fit` or ?`fisher.alpha`. Treat fisher results with caution")
+        warning("phyloseq::estimate_richness: Warning in fisher.alpha().\n",
+                "See `?fisher.fit` or ?`fisher.alpha`.\n",
+                "Treat fisher results with caution")
         suppressWarnings(fisher.alpha(OTU, se=TRUE)[, c("alpha", "se")])
       }
     )

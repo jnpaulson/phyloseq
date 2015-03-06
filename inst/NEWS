@@ -1,3 +1,10 @@
+CHANGES IN VERSION 1.11.4
+-------------------------
+
+USER-VISIBLE CHANGES
+
+  - Adds `lowest_rank` function requested by Austin Richardson @audy. This also closes Pull Request 371 https://github.com/joey711/phyloseq/pull/371
+
 CHANGES IN VERSION 1.11.3
 -------------------------
 
