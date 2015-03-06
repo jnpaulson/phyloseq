@@ -450,26 +450,51 @@ rank_names <- function(physeq, errorIfNULL=TRUE){
 	colnames(tax_table(physeq, errorIfNULL))	
 }
 ################################################################################
-#' Return the lowest classified rank in the taxonomy table
+#' Return the lowest non-empty rank in the taxonomy table.
 #'
-#' @usage lowest_rank(physeq)
+#' @param physeq (Required). 
+#'  An instance of the \code{\link{phyloseq-class}}
+#'  that presumably has a \code{\link{tax_table}} component.
+#' 
+#' @param errorIfNULL (Optional). Logical. Should the accessor stop with 
+#'  an error if the slot is empty (\code{NULL})?
+#'  Default \code{FALSE},
+#'  meaning \code{NULL} is silently returned if
+#'  \code{tax_table} slot is empty.
 #'
-#' @return Character vector. The name of the lowest rank in the taxonomy table.
+#' @return Character string.
+#'  The (column) name of the lowest non-empty rank in the taxonomy table.
 #'
 #' @seealso \code{\link{rank_names}}}
 #'
 #' @export
 #'
 #' @examples
-#' data(enterotype)
-#' lowest_rank(enterotype)
-lowest_rank <- function(physeq) {
-  rn <- tax_table(physeq)
-  cn <- colnames(rn[,colSums(is.na(rn)) != nrow(rn)])
-  tail(cn, 1)
+#' data(GlobalPatterns)
+#' lowest_rank(GlobalPatterns)
+#' # Add a dummy rank that is all empty
+#' GP = GlobalPatterns
+#' tax_table(GP) <- tax_table(cbind(tax_table(GP), Strain = NA))
+#' lowest_rank(GP)
+lowest_rank <- function(physeq, errorIfNULL = FALSE){
+  tt <- tax_table(physeq, errorIfNULL = errorIfNULL)
+  if(is.null(tt) | ncol(tt) < 1){
+    # Return NULL if tax_table is empty.
+    return(NULL)
+  }
+  if(ncol(tt) == 1){
+    return(colnames(tt)[1])
+  }
+  # Define the colnames that pass.
+  whPass = which(colSums(is.na(tt)) != nrow(tt))
+  if(length(whPass) < 1){
+    # Throw warning that taxonomy table was empty
+    warning("Taxonomy table contains only missing values.")
+    return(NULL)
+  }
+  # Return the last one.
+  return(tail(colnames(tt)[whPass], 1))
 }
-
-
 ################################################################################
 #' Get a unique vector of the observed taxa at a particular taxonomic rank
 #'
