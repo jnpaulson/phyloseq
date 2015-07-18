@@ -1596,7 +1596,7 @@ export_env_file <- function(physeq, file="", writeTree=TRUE, return=FALSE){
 #' Import phyloseq data from biom-format file
 #'
 #' New versions of QIIME produce a more-comprehensive and formally-defined
-#' JSON file format, called biom file format:
+#' file format based on either JSON or HDF5, called "biom-format":
 #'
 #' ``The biom file format (canonically pronounced `biome') is designed to be a 
 #' general-use format for representing counts of observations in one or
@@ -1610,19 +1610,19 @@ export_env_file <- function(physeq, file="", writeTree=TRUE, return=FALSE){
 #'  parseFunction=parse_taxonomy_default, parallel=FALSE, version=1.0, ...)
 #'
 #' @param BIOMfilename (Required). A character string indicating the 
-#'  file location of the BIOM formatted file. This is a JSON formatted file,
-#'  specific to biological datasets, as described in 
-#'  \url{http://www.qiime.org/svn_documentation/documentation/biom_format.html}{the biom-format home page}.
-#'  In principle, this file should include you OTU abundance data (OTU table),
+#'  file location of the BIOM formatted file.
+#'  This is either JSON or HDF5
+#'  In principle, this file should include your OTU abundance data (OTU table),
 #'  your taxonomic classification data (taxonomy table), as well as your
 #'  sample data, for instance what might be in your ``sample map'' in QIIME.
 #'  A phylogenetic tree is not yet supported by biom-format, and so is a
-#'  separate argument here. If, for some reason, your biom-format file is
+#'  separate argument here. If for some reason your biom-format file is
 #'  missing one of these mentioned data types but you have it in a separate file,
 #'  you can first import the data that is in the biom file using this function,
 #'  \code{import_biom}, and then ``merge'' the remaining data after you have
 #'  imported with other tools using the relatively general-purpose data
 #'  merging function called \code{\link{merge_phyloseq}}.
+#'  Examples for this are also included in a number of tutorials.
 #'
 #' @param treefilename (Optional). Default value is \code{NULL}. 
 #'  A file representing a phylogenetic tree
@@ -1710,12 +1710,6 @@ export_env_file <- function(physeq, file="", writeTree=TRUE, return=FALSE){
 #'  because a serial import will be just as fast and the import is often only
 #'  performed one time; after which the data should be saved as an RData file
 #'  using the \code{\link{save}} function.
-#' 
-#' @param version (Optional). Numeric. The expected version number of the file.
-#'  As the BIOM format evolves, version-specific importers may be available
-#'  by adjusting the version value. Default is \code{1.0}. 
-#'  Not yet implemented. Parsing of the biom-format is done mostly
-#'  by the biom package now available in CRAN.
 #'
 #' @param ... Additional parameters passed on to \code{\link{read_tree}}.
 #'
@@ -1730,25 +1724,25 @@ export_env_file <- function(physeq, file="", writeTree=TRUE, return=FALSE){
 #' 
 #' \code{\link{read_tree_greengenes}}
 #' 
-#' \code{\link[biom]{biom-package}}
+#' \code{\link[biomformat]{biom-package}}
 #' 
-#' \code{\link[biom]{read_biom}}
+#' \code{\link[biomformat]{read_biom}}
 #'
-#' \code{\link[biom]{biom_data}}
+#' \code{\link[biomformat]{biom_data}}
 #'
-#' \code{\link[biom]{sample_metadata}}
+#' \code{\link[biomformat]{sample_metadata}}
 #' 
-#' \code{\link[biom]{observation_metadata}}
+#' \code{\link[biomformat]{observation_metadata}}
 #'
 #' \code{\link[Biostrings]{XStringSet-io}}
 #'
 #' @references \href{http://www.qiime.org/svn_documentation/documentation/biom_format.html}{biom-format}
 #'
 #' @importFrom Biostrings readDNAStringSet
-#' @importFrom biom read_biom
-#' @importFrom biom sample_metadata
-#' @importFrom biom biom_data
-#' @importFrom biom observation_metadata
+#' @importFrom biomformat read_biom
+#' @importFrom biomformat sample_metadata
+#' @importFrom biomformat biom_data
+#' @importFrom biomformat observation_metadata
 #' @export
 #' @examples
 #' # An included example of a rich dense biom file
@@ -1763,7 +1757,7 @@ export_env_file <- function(physeq, file="", writeTree=TRUE, return=FALSE){
 #' # import_biom("my/file/path/file.biom", parseFunction=parse_taxonomy_greengenes, parallel=TRUE)
 import_biom <- function(BIOMfilename, 
 	treefilename=NULL, refseqfilename=NULL, refseqFunction=readDNAStringSet, refseqArgs=NULL,
-	parseFunction=parse_taxonomy_default, parallel=FALSE, version=1.0, ...){
+	parseFunction=parse_taxonomy_default, parallel=FALSE, ...){
 
 	# initialize the argument-list for phyloseq. Start empty.
 	argumentlist <- list()

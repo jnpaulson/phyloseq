@@ -69,7 +69,9 @@ http://joey711.github.com/phyloseq/import-data
 
 ## Import from biom-format <a id="sec:biom"></a>
 
-New versions of QIIME (see below) produce a more-comprehensive and formally-defined JSON file format, called biom file format:
+New versions of QIIME (see below) produce a more-comprehensive 
+and formally-defined file format based on either JSON or HDF5,
+usually names with a `.biom` extension:
 
 "The biom file format (canonically pronounced `biome') is designed to be a general-use format for representing counts of observations in one or more biological samples. BIOM is a recognized standard for the Earth Microbiome Project and is a Genomics Standards Consortium candidate project."
 
